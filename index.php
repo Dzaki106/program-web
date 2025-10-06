@@ -1,11 +1,9 @@
 <?php
 session_start();
 
-// Handle query string parameters
 $message = isset($_GET['message']) ? $_GET['message'] : '';
 $status = isset($_GET['status']) ? $_GET['status'] : '';
 
-// Check if user is logged in
 $isLoggedIn = isset($_SESSION['username']);
 $username = $isLoggedIn ? $_SESSION['username'] : '';
 ?>
@@ -18,7 +16,6 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="container header-container">
             <div class="logo">Game Store Man</div>
@@ -40,8 +37,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
             </nav>
         </div>
     </header>
-
-    <!-- Notification from query string -->
+>
     <?php if ($message): ?>
     <div class="notification <?php echo $status; ?>" style="position: fixed; top: 20px; right: 20px; padding: 1rem 2rem; border-radius: 4px; z-index: 1000; background: <?php echo $status === 'success' ? '#27ae60' : '#e74c3c'; ?>; color: white;">
         <?php echo htmlspecialchars($message); ?>
@@ -53,14 +49,12 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     </script>
     <?php endif; ?>
 
-    <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="container">
             <h1 class="hero-title">Game Store Man</h1>
             <p class="hero-subtitle">Temukan game terbaik dengan harga terbaik. Jelajahi koleksi kami dan temukan petualangan gaming berikutnya!</p>
             <a href="#games" class="btn">Lihat Game</a>
-            
-            <!-- Search Bar -->
+
             <div class="search-container">
                 <input type="text" id="search-input" placeholder="Cari game..." class="search-input">
                 <button id="search-btn" class="btn btn-secondary">Cari</button>
@@ -68,12 +62,10 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
         </div>
     </section>
 
-    <!-- Games Section -->
     <section class="section" id="games">
         <div class="container">
             <h2 class="section-title">Game Yang Tersedia</h2>
-            
-            <!-- Filter Buttons -->
+
             <div class="filter-buttons">
                 <button class="btn filter-btn active" data-filter="all">Semua</button>
                 <button class="btn filter-btn" data-filter="action">Action</button>
@@ -87,7 +79,6 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
         </div>
     </section>
 
-    <!-- Cart Section -->
     <section class="section" id="cart">
         <div class="container">
             <h2 class="section-title">Keranjang Belanja</h2>
@@ -104,7 +95,6 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer" id="contact">
         <div class="container">
             <p>Game Store Man - Toko Game Terpercaya</p>
@@ -117,7 +107,6 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
         </div>
     </footer>
 
-    <!-- Modal untuk Detail Game -->
     <div id="game-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
@@ -129,4 +118,5 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 
     <script src="script.js"></script>
 </body>
+
 </html>
