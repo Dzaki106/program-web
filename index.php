@@ -78,8 +78,7 @@
         <p class="subtitle">Toko Game Terpercaya</p>
         
         <div style="margin-bottom: 2rem;">
-            <a href="login.php" class="btn">Login ke Store</a>
-            <a href="store.php" class="btn btn-secondary">Lihat Store (Guest)</a>
+            <a href="login.php" class="btn">Login</a>
         </div>
         
         <div class="demo-info">
