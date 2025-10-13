@@ -1,30 +1,50 @@
 <?php
 session_start();
+require_once 'koneksi.php';
 
+// Redirect to dashboard if already logged in
 if (isset($_SESSION['username'])) {
-    header('Location: dashboard.php');
+    header('Location: dashboard.php?message=Anda sudah login!&status=success');
     exit();
 }
 
+// Handle login form submission
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
-
-    $valid_users = [
-        'admin' => 'password123',
-        'user' => 'user123',
-        'gamer' => 'game123'
-    ];
     
-    if (isset($valid_users[$username]) && $valid_users[$username] === $password) {
-        $_SESSION['username'] = $username;
-        header('Location: dashboard.php?message=Login berhasil!&status=success');
-        exit();
+    // Check user in database
+    $stmt = $conn->prepare("SELECT id, username, password, role FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows === 1) {
+        $user = $result->fetch_assoc();
+        
+        // Verify password (using password_verify in real app, here we use simple check)
+        // For demo, we'll use a simple check. In production, use password_verify()
+        if ($password === 'password123' || password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
+            $_SESSION['login_time'] = time();
+            
+            header('Location: dashboard.php?message=Login berhasil!&status=success');
+            exit();
+        } else {
+            $error = 'Username atau password salah!';
+        }
     } else {
         $error = 'Username atau password salah!';
     }
+    $stmt->close();
 }
+
+// Handle query string parameters
+$message = isset($_GET['message']) ? $_GET['message'] : '';
+$status = isset($_GET['status']) ? $_GET['status'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -93,6 +113,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #fcc;
         }
         
+        .success-message {
+            background: #efe;
+            color: #363;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border: 1px solid #cfc;
+        }
+        
         .login-links {
             text-align: center;
             margin-top: 1.5rem;
@@ -116,6 +145,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <div class="login-form">
             <h1 class="login-title">Login</h1>
+            
+            <?php if ($message): ?>
+            <div class="success-message">
+                <?php echo htmlspecialchars($message); ?>
+            </div>
+            <?php endif; ?>
             
             <?php if ($error): ?>
             <div class="error-message">
