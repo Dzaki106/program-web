@@ -2,13 +2,11 @@
 session_start();
 require_once 'koneksi.php';
 
-// Redirect to dashboard if already logged in
 if (isset($_SESSION['username'])) {
     header('Location: dashboard.php?message=Anda sudah login!&status=success');
     exit();
 }
 
-// Handle login form submission
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
@@ -189,3 +187,4 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
     </div>
 </body>
 </html>
+
