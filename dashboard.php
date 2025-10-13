@@ -2,7 +2,6 @@
 session_start();
 require_once 'koneksi.php';
 
-// Redirect to login if not logged in
 if (!isset($_SESSION['username'])) {
     header('Location: login.php?message=Silakan login terlebih dahulu!&status=error');
     exit();
@@ -12,11 +11,9 @@ $username = $_SESSION['username'];
 $role = $_SESSION['role'];
 $login_time = isset($_SESSION['login_time']) ? $_SESSION['login_time'] : time();
 
-// Handle CRUD operations
 $message = '';
 $status = '';
 
-// CREATE - Add new game
 if (isset($_POST['add_game']) && $role === 'admin') {
     $name = $conn->real_escape_string($_POST['name']);
     $price = $_POST['price'];
@@ -38,7 +35,6 @@ if (isset($_POST['add_game']) && $role === 'admin') {
     $stmt->close();
 }
 
-// UPDATE - Edit game
 if (isset($_POST['edit_game']) && $role === 'admin') {
     $id = $_POST['id'];
     $name = $conn->real_escape_string($_POST['name']);
@@ -78,10 +74,8 @@ if (isset($_GET['delete']) && $role === 'admin') {
     $stmt->close();
 }
 
-// Get all games
 $games_result = $conn->query("SELECT * FROM games ORDER BY created_at DESC");
 
-// Handle query string parameters
 if (isset($_GET['message']) && empty($message)) {
     $message = $_GET['message'];
     $status = $_GET['status'] ?? 'success';
@@ -369,7 +363,6 @@ if (isset($_GET['message']) && empty($message)) {
         </div>
     </div>
 
-    <!-- Add Game Modal -->
     <div id="addModal" class="form-modal">
         <div class="form-modal-content">
             <span class="close-modal" onclick="closeAddModal()">&times;</span>
@@ -410,7 +403,6 @@ if (isset($_GET['message']) && empty($message)) {
         </div>
     </div>
 
-    <!-- Edit Game Modal -->
     <div id="editModal" class="form-modal">
         <div class="form-modal-content">
             <span class="close-modal" onclick="closeEditModal()">&times;</span>
@@ -487,3 +479,4 @@ if (isset($_GET['message']) && empty($message)) {
 </body>
 </html>
 <?php $conn->close(); ?>
+
